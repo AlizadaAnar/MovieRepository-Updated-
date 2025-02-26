@@ -1,0 +1,35 @@
+#spring.application.name=MovieApiDev
+#server.port=8089
+#spring.datasource.url=jdbc:postgresql://localhost:5432/moviedb
+#spring.datasource.username=postgres
+#spring.datasource.password=murad2016
+#spring.datasource.driver-class-name=org.postgresql.Driver
+#spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+#spring.jpa.hibernate.ddl-auto=update
+#springdoc.swagger-ui.path=/swagger-ui.html
+#springdoc.api-docs.path=/v3/api-docs
+#springdoc.swagger-ui.enabled=true
+spring:
+  application:
+    name: MovieApiDev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/moviedb
+    username: postgres
+    password: murad2016
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+
+  doc:
+    swagger-ui:
+      path: /swagger-ui
+      enabled: true
+    api-docs:
+      path: /v3/api-docs
+
+server:
+  port: 8089
+
