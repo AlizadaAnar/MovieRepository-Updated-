@@ -35,6 +35,7 @@ public class MovieControllerByNamedQuery {
         return movieServiceByNamedQuery.getMovieByEmail(email, title);
     }
 
+
     @PostMapping("/movie/create")
     public void createMovie(@Valid @RequestBody MovieEntityByNamedQuery movieEntity) {
          movieServiceByNamedQuery.createMovie(movieEntity);
