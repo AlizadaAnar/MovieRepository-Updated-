@@ -3,10 +3,12 @@ package org.moviexample.movieapidev.Controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.moviexample.movieapidev.Entity.MovieEntity;
+import org.moviexample.movieapidev.model.entity.MovieEntity;
 import org.moviexample.movieapidev.Service.MovieService;
+import org.moviexample.movieapidev.model.entity.PersonEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/movies")
 @RequiredArgsConstructor
-@Tag(name = "Movies Api",description = "CRUD operations for Movies ")
+@Tag(name = "Movies Api", description = "CRUD operations for Movies ")
 @Slf4j
 public class MovieController {
 
@@ -32,26 +34,26 @@ public class MovieController {
 
     @GetMapping("getMoviesByID/{id}")
     @Operation(summary = "Getting movies by id")
-    public ResponseEntity<MovieEntity> getMovieById(@PathVariable Long id) {
+    public ResponseEntity<Optional<MovieEntity>> getMovieById(@PathVariable Long id) {
         log.info("Received request to retrieve movies by id");
-        Optional<MovieEntity> movie = movieService.getMovieById(id);
-        return movie.map(ResponseEntity::ok)
-                .orElseGet(() -> {
-                log.warn("Movie with id {} not found", id);
-                return ResponseEntity.notFound().build();
-    });
-}
+        Optional<MovieEntity> movieById = movieService.getMovieById(id);
+        return ResponseEntity.ok(movieById);
+    }
+
+
 
     @PostMapping
     @Operation(summary = "Adding new movie")
-    public ResponseEntity<MovieEntity> addMovie(@RequestBody MovieEntity movieEntity) {
-       log.info("Adding new movie requested {}", movieEntity.getTitle());
+    public ResponseEntity<MovieEntity> addMovie(@Valid @RequestBody MovieEntity movieEntity) {
+        log.info("Adding new movie requested {}", movieEntity.getTitle());
         return ResponseEntity.ok(movieService.addMovie(movieEntity));
     }
 
+
+
     @PutMapping("/{id}")
     @Operation(summary = "update movie by Id")
-    public ResponseEntity<MovieEntity> updateMovie(@PathVariable Long id, @RequestBody MovieEntity movieEntity) {
+    public ResponseEntity<MovieEntity> updateMovie(@PathVariable Long id, @Valid @RequestBody MovieEntity movieEntity) {
         log.info("Updating movie with id {}", id);
         return ResponseEntity.ok(movieService.updateMovies(id, movieEntity));
     }

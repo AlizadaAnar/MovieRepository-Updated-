@@ -3,8 +3,12 @@ package org.moviexample.movieapidev.Service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.moviexample.movieapidev.Entity.MovieEntity;
+import org.moviexample.movieapidev.Repository.PersonRepo;
+import org.moviexample.movieapidev.exception.PersonNotFoundException;
+import org.moviexample.movieapidev.model.entity.MovieEntity;
 import org.moviexample.movieapidev.Repository.MovieRepo;
+import org.moviexample.movieapidev.exception.MovieNotFoundException;
+import org.moviexample.movieapidev.model.entity.PersonEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +21,7 @@ public class MovieService {
 
     private final MovieRepo movieRepo;
 
+
     public MovieEntity addMovie(MovieEntity movieEntity) {
         log.info("Adding new movie: -> {}", movieEntity.getTitle());
         MovieEntity savedMovie = movieRepo.save(movieEntity);
@@ -25,21 +30,20 @@ public class MovieService {
 
     }
 
+
     public MovieEntity updateMovies(Long id, MovieEntity updatedMovies) {
         log.info("Updating movie: -> {}", id);
         return movieRepo.findById(id).map(contMovie -> {
             contMovie.setGenre(updatedMovies.getGenre());
             contMovie.setTitle(updatedMovies.getTitle());
-            contMovie.setYear(updatedMovies.getYear());
+            contMovie.setRelease_year(updatedMovies.getRelease_year());
             contMovie.setDirector(updatedMovies.getDirector());
             contMovie.setIMDbRating(updatedMovies.getIMDbRating());
             MovieEntity updatedMovie = movieRepo.save(contMovie);
             log.info("Movie updated successfully with ID : {}", id);
             return updatedMovie;
-        }).orElseThrow(() -> {
-            log.info("Movie not found with ID : {}", id);
-            return new RuntimeException("Movie not found with id: " + id);
-        });
+        }).orElseThrow(() ->
+                new MovieNotFoundException("Movie with id: " + id + " not found"));
     }
 
     public List<MovieEntity> getAllMovies() {
@@ -51,14 +55,31 @@ public class MovieService {
 
     public Optional<MovieEntity> getMovieById(Long id) {
         log.info("Fetching movie by ID: {}", id);
-        return movieRepo.findById(id);
+        return Optional.ofNullable(movieRepo.findById(id).orElseThrow(() ->
+                new MovieNotFoundException("Movie with id: " + id + " not found")));
     }
+
+
 
     public void deleteMovie(Long id) {
         log.warn("Deleting movie with ID: {}", id);
-        movieRepo.deleteById(id);
+        movieRepo.findById(id)
+                .ifPresentOrElse(movieRepo::delete,
+                        () -> {
+                            throw new MovieNotFoundException("Movie with id: " + id + " not found");
+                        });
         log.info("Movie deleted successfully with ID : {}", id);
     }
+
+
+    public void deleteMovie2(Long id) {
+        if(!movieRepo.existsById(id)) {
+            throw new MovieNotFoundException("Movie with id: " + id + " not found");
+        }
+        movieRepo.deleteById(id);
+        log.info("Successfully deleted!!");
+    }
+
 }
 
 

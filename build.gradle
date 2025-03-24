@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.4.3'
-    id 'io.spring.dependency-management' version '1.1.7'
+    id 'org.springframework.boot' version '3.0.0' // Ensure this is correct
+    id 'io.spring.dependency-management' version '1.0.13.RELEASE'
 }
 
 group = 'org.moviexample'
@@ -39,6 +39,8 @@ dependencies {
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {

@@ -1,7 +1,7 @@
 package org.moviexample.movieapidev.Repository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.moviexample.movieapidev.Entity.MovieEntity;
+import org.moviexample.movieapidev.model.entity.MovieEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
