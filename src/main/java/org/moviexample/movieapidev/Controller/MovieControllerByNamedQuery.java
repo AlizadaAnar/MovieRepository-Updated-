@@ -40,4 +40,5 @@ public class MovieControllerByNamedQuery {
          movieServiceByNamedQuery.createMovie(movieEntity);
     }
 
+
 }
