@@ -38,7 +38,6 @@ public class MovieControllerByNamedQuery {
     @PostMapping("/movie/create")
     public void createMovie(@Valid @RequestBody MovieEntityByNamedQuery movieEntity) {
          movieServiceByNamedQuery.createMovie(movieEntity);
-
     }
 
 }
